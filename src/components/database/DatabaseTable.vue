@@ -29,7 +29,7 @@
               </template>
             </div>
           </th>
-          <th role="columnheader" scope="col">
+          <th role="columnheader" scope="col" class="align-middle">
             <div>
               <b-icon-x class="cursor-pointer" @click="remove"></b-icon-x>
             </div>
