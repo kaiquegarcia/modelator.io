@@ -107,6 +107,7 @@ export default {
       });
       table.$mount("#table_" + this.lastId);
       table.$on("remove", () => this.removeTable(id));
+      table.openTableEditor();
       this.instances[id] = table;
     },
     removeTable(id) {
