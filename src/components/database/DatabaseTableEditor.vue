@@ -24,6 +24,7 @@
 </template>
 <script>
 export default {
+  name: "DatabaseTableEditor",
   props: {
     tableInput: {
       type: Object,

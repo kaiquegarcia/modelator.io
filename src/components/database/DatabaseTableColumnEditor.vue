@@ -94,6 +94,7 @@
 </template>
 <script>
 export default {
+  name: "DatabaseColumnEditor",
   props: {
     columnInput: {
       type: Object,

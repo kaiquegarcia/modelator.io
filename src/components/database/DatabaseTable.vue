@@ -91,6 +91,7 @@ const ColumnEditorClass = Vue.extend(DatabaseTableColumnEditor);
 let tableEditor = null,
   columnEditor = null;
 export default {
+  name: "DatabaseTable",
   components: {
     draggable
   },
