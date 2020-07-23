@@ -4,36 +4,53 @@
       <b-tabs v-model="currentTab" card>
         <b-tab title="Columns">
           <b-card-text>
-            <b-table
-              :striped="true"
-              :bordered="true"
-              :small="true"
-              :hover="true"
-              head-variant="dark"
-              table-variant="light"
-              :items="columns"
-              :fields="columnFields"
+            <table
+              role="table"
+              class="table b-table table-striped table-hover table-bordered table-sm table-light"
             >
-              <template v-slot:head(acts)="">
-                <b-icon-plus
-                  class="cursor-pointer"
-                  @click.prevent="createColumn"
-                ></b-icon-plus>
-              </template>
-              <template v-slot:cell(acts)="column">
-                <b-icon-pencil
-                  class="cursor-pointer"
-                  @click.prevent="openColumnEditor(column.index)"
-                ></b-icon-pencil>
-                <b-icon-x
-                  class="cursor-pointer"
-                  @click.prevent="removeColumn(column.index)"
-                ></b-icon-x>
-              </template>
-              <template v-slot:cell(PK)="column">
-                <b-icon-lock v-if="column.value"></b-icon-lock>
-              </template>
-            </b-table>
+              <thead role="rowgroup" class="thead-dark">
+                <tr role="row">
+                  <th role="columnheader" scope="col" title="Primary Key">
+                    <div>PK</div>
+                  </th>
+                  <th role="columnheader" scope="col">
+                    <div>Name</div>
+                  </th>
+                  <th role="columnheader" scope="col">
+                    <div>Data Type</div>
+                  </th>
+                  <th role="columnheader" scope="col">
+                    <b-icon-plus
+                      class="cursor-pointer"
+                      @click="createColumn"
+                    ></b-icon-plus>
+                  </th>
+                </tr>
+              </thead>
+              <draggable v-model="columns" tag="tbody" role="rowgroup">
+                <tr
+                  v-for="(column, columnIndex) in columns"
+                  role="row"
+                  :key="columnIndex"
+                >
+                  <td role="cell">
+                    <b-icon-lock v-if="column.PK"></b-icon-lock>
+                  </td>
+                  <td role="cell">{{ column.name }}</td>
+                  <td role="cell">{{ column.dataType }}</td>
+                  <td role="cell">
+                    <b-icon-pencil
+                      class="cursor-pointer"
+                      @click="openColumnEditor(columnIndex)"
+                    ></b-icon-pencil>
+                    <b-icon-x
+                      class="cursor-pointer"
+                      @click="removeColumn(columnIndex)"
+                    ></b-icon-x>
+                  </td>
+                </tr>
+              </draggable>
+            </table>
           </b-card-text>
         </b-tab>
         <b-tab title="Table related indexes">
@@ -45,11 +62,15 @@
   </div>
 </template>
 <script>
+import draggable from "vuedraggable";
 import DatabaseTableColumnEditor from "./DatabaseTableColumnEditor";
 import Vue from "vue";
 const ColumnEditorClass = Vue.extend(DatabaseTableColumnEditor);
 let columnEditor = null;
 export default {
+  components: {
+    draggable
+  },
   data() {
     return {
       name: "",
@@ -117,26 +138,6 @@ export default {
           B: false
         }
       ],
-      columnFields: [
-        {
-          key: "PK",
-          label: "PK",
-          headerTitle: "Primary Key",
-          sortable: false
-        },
-        {
-          key: "name",
-          sortable: false
-        },
-        {
-          key: "dataType",
-          sortable: false
-        },
-        {
-          key: "acts",
-          label: "Actions"
-        }
-      ],
       indexes: [],
       foreignKeys: [],
       currentTab: 0,
@@ -180,14 +181,6 @@ export default {
     removeColumn(columnIndex) {
       this.columns.splice(columnIndex, 1);
     }
-  },
-  computed: {
-    showColumnEditor() {
-      return this.currentEditingColumnIndex > -1;
-    },
-    currentEditingColumn() {
-      return this.columns[this.currentEditingColumnIndex] || {};
-    }
   }
 };
 </script>
@@ -195,6 +188,8 @@ export default {
 .database-table table
   width: 450px !important
   max-width: 100%
+  tbody tr
+    cursor: move
 .cursor-pointer
     cursor: pointer
 </style>

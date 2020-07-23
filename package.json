@@ -13,7 +13,8 @@
     "core-js": "^3.6.5",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.2",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vuedraggable": "^2.24.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
