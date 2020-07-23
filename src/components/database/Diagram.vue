@@ -125,6 +125,5 @@ export default {
 .diagram-workspace
     width: 100%
     height: 600px
-    border: 1px solid #000
     position: relative
 </style>

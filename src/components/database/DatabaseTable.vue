@@ -2,10 +2,12 @@
   <vue-draggable-resizable
     class="database-table"
     :resizable="false"
-    :parent="true"
+    :parent="false"
     :scale="scale"
     :w="450"
+    :enableNativeDrag="true"
     h="auto"
+    dragHandle="thead"
   >
     <table
       role="table"
