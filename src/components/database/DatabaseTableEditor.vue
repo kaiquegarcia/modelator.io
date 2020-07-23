@@ -11,7 +11,7 @@
       </h3>
       <hr />
       <b-form-group label="Name">
-        <b-input type="text" v-model="table.name" required />
+        <b-input type="text" v-model="table.name" required ref="tableName" />
       </b-form-group>
       <b-form-group label="Description">
         <b-input type="text" v-model="table.description" />
@@ -42,6 +42,10 @@ export default {
   },
   beforeDestroy() {
     this.$root.$el.parentNode.removeChild(this.$root.$el);
+  },
+  mounted() {
+    this.$refs.tableName.focus();
+    this.$refs.tableName.select();
   }
 };
 </script>

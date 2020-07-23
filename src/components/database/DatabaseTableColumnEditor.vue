@@ -11,7 +11,7 @@
       </h3>
       <hr />
       <b-form-group label="Name">
-        <b-input type="text" v-model="column.name" required />
+        <b-input type="text" v-model="column.name" required ref="columnName" />
       </b-form-group>
       <b-form-group label="Data type">
         <b-input type="text" v-model="column.dataType" required />
@@ -112,6 +112,10 @@ export default {
   },
   beforeDestroy() {
     this.$root.$el.parentNode.removeChild(this.$root.$el);
+  },
+  mounted() {
+    this.$refs.columnName.focus();
+    this.$refs.columnName.select();
   }
 };
 </script>
