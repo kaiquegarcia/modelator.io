@@ -3,6 +3,7 @@
     <h1>Modelator.io</h1>
     <br />
     <diagram></diagram>
+    <div class="editor-container"></div>
   </div>
 </template>
 

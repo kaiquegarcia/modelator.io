@@ -1,5 +1,12 @@
 <template>
-  <div class="database-table">
+  <vue-draggable-resizable
+    class="database-table"
+    :resizable="false"
+    :parent="true"
+    :scale="scale"
+    :w="450"
+    h="auto"
+  >
     <table
       role="table"
       class="table b-table table-striped table-hover table-bordered table-sm table-light"
@@ -77,14 +84,14 @@
         </tr>
       </draggable>
     </table>
-    <div ref="editorContainer"></div>
-  </div>
+  </vue-draggable-resizable>
 </template>
 <script>
 import draggable from "vuedraggable";
 import DatabaseTableEditor from "./DatabaseTableEditor";
 import DatabaseTableColumnEditor from "./DatabaseTableColumnEditor";
 import Vue from "vue";
+import VueDraggableResizable from "vue-draggable-resizable";
 
 const TableEditorClass = Vue.extend(DatabaseTableEditor);
 const ColumnEditorClass = Vue.extend(DatabaseTableColumnEditor);
@@ -93,11 +100,16 @@ let tableEditor = null,
 export default {
   name: "DatabaseTable",
   components: {
-    draggable
+    draggable,
+    VueDraggableResizable
   },
   props: {
     tableInput: {
       type: Object,
+      required: true
+    },
+    scale: {
+      type: Number,
       required: true
     }
   },
@@ -108,10 +120,13 @@ export default {
     };
   },
   methods: {
+    getEditorContainer() {
+      return document.querySelector(".editor-container");
+    },
     openTableEditor() {
       let editorContainer = document.createElement("div");
       editorContainer.id = "table-editor-container";
-      this.$refs.editorContainer.appendChild(editorContainer);
+      this.getEditorContainer().appendChild(editorContainer);
       tableEditor = new TableEditorClass({
         propsData: {
           tableInput: this.table
@@ -127,7 +142,7 @@ export default {
       this.currentEditingColumnIndex = columnIndex;
       let editorContainer = document.createElement("div");
       editorContainer.id = "column-editor-container";
-      this.$refs.editorContainer.appendChild(editorContainer);
+      this.getEditorContainer().appendChild(editorContainer);
       columnEditor = new ColumnEditorClass({
         propsData: {
           columnInput: this.table.columns[this.currentEditingColumnIndex]
@@ -181,14 +196,14 @@ export default {
 };
 </script>
 <style lang="sass">
-.database-table
-    margin-bottom: 30px
-    table
-        width: 450px !important
-        max-width: 100%
-        tbody tr
-            cursor: move
+.database-table table
+    margin-bottom: 0
+    max-width: 100%
+    tbody tr
+        cursor: move
 
 .cursor-pointer
     cursor: pointer
+.vdr
+    border: none !important
 </style>
