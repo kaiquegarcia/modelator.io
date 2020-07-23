@@ -156,10 +156,22 @@ export default {
       this.openColumnEditor(this.table.columns.length - 1);
     },
     removeColumn(columnIndex) {
-      this.table.columns.splice(columnIndex, 1);
+      if (
+        confirm(
+          "Você quer mesmo apagar essa coluna? Essa ação não poderá ser desfeita."
+        )
+      ) {
+        this.table.columns.splice(columnIndex, 1);
+      }
     },
     remove() {
-      this.$emit("remove");
+      if (
+        confirm(
+          "Você quer mesmo apagar essa tabela? Essa ação não poderá ser desfeita."
+        )
+      ) {
+        this.$emit("remove");
+      }
     }
   },
   beforeDestroy() {
