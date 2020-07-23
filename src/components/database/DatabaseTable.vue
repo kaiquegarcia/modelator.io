@@ -10,13 +10,22 @@
             >
               <thead role="rowgroup" class="thead-dark">
                 <tr role="row">
-                  <th role="columnheader" scope="col" colspan="4">
+                  <th role="columnheader" scope="col" v-if="table.engine" class="bg-danger align-middle">
+                    <div>
+                      {{ table.engine }}
+                    </div>
+                  </th>
+                  <th role="columnheader" scope="col" :colspan="table.engine ? 3 : 4">
                     <div>
                       {{ table.name }}
                       <b-icon-pencil
                         class="cursor-pointer"
                         @click="openTableEditor"
                       ></b-icon-pencil>
+                      <template v-if="table.description">
+                        <br />
+                        <small>{{ table.description }}</small>
+                      </template>
                     </div>
                   </th>
                 </tr>
