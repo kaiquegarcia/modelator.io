@@ -10,6 +10,17 @@
             >
               <thead role="rowgroup" class="thead-dark">
                 <tr role="row">
+                  <th role="columnheader" scope="col" colspan="4">
+                    <div>
+                      {{ table.name }}
+                      <b-icon-pencil
+                        class="cursor-pointer"
+                        @click="openTableEditor"
+                      ></b-icon-pencil>
+                    </div>
+                  </th>
+                </tr>
+                <tr role="row">
                   <th role="columnheader" scope="col" title="Primary Key">
                     <div>PK</div>
                   </th>
@@ -63,19 +74,25 @@
 </template>
 <script>
 import draggable from "vuedraggable";
+import DatabaseTableEditor from "./DatabaseTableEditor";
 import DatabaseTableColumnEditor from "./DatabaseTableColumnEditor";
 import Vue from "vue";
+
+const TableEditorClass = Vue.extend(DatabaseTableEditor);
 const ColumnEditorClass = Vue.extend(DatabaseTableColumnEditor);
-let columnEditor = null;
+let tableEditor = null,
+  columnEditor = null;
 export default {
   components: {
     draggable
   },
   data() {
     return {
-      name: "",
-      description: "",
-      engine: "",
+      table: {
+        name: "table_name",
+        description: "",
+        engine: ""
+      },
       columns: [
         {
           name: "id",
@@ -145,17 +162,32 @@ export default {
     };
   },
   methods: {
+    openTableEditor() {
+      let editorContainer = document.createElement("div");
+      editorContainer.id = "table-editor-container";
+      this.$refs.editorContainer.appendChild(editorContainer);
+      tableEditor = new TableEditorClass({
+        propsData: {
+          tableInput: this.table
+        }
+      });
+      tableEditor.$mount("#table-editor-container");
+      tableEditor.$on("close", () => this.closeTableEditor());
+    },
+    closeTableEditor() {
+      tableEditor.$destroy();
+    },
     openColumnEditor(columnIndex) {
       this.currentEditingColumnIndex = columnIndex;
       let editorContainer = document.createElement("div");
-      editorContainer.id = "editor-container";
+      editorContainer.id = "column-editor-container";
       this.$refs.editorContainer.appendChild(editorContainer);
       columnEditor = new ColumnEditorClass({
         propsData: {
           columnInput: this.columns[this.currentEditingColumnIndex]
         }
       });
-      columnEditor.$mount("#editor-container");
+      columnEditor.$mount("#column-editor-container");
       columnEditor.$on("close", () => this.closeColumnEditor());
     },
     closeColumnEditor() {
@@ -186,10 +218,12 @@ export default {
 </script>
 <style lang="sass">
 .database-table table
-  width: 450px !important
-  max-width: 100%
-  tbody tr
-    cursor: move
+    width: 450px !important
+    max-width: 100%
+
+    tbody tr
+        cursor: move
+
 .cursor-pointer
     cursor: pointer
 </style>

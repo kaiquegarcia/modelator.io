@@ -5,9 +5,9 @@
 </template>
 
 <script>
-  import DatabaseTable from "./database/DatabaseTable";
+import DatabaseTable from "./database/DatabaseTable";
 export default {
-  components: {DatabaseTable},
+  components: { DatabaseTable },
   name: "HelloWorld",
   props: {
     msg: String
