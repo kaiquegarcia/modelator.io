@@ -1,9 +1,5 @@
 <template>
   <div>
-    <b-button variant="success" @click="createTable">
-      <b-icon-plus></b-icon-plus> Adicionar tabelas
-    </b-button>
-    <hr />
     <div class="diagram-workspace"></div>
   </div>
 </template>
