@@ -44,7 +44,8 @@ export default {
             UQ: false,
             UN: false,
             ZF: false,
-            B: false
+            B: false,
+            FK: null
           },
           {
             name: "status",
@@ -56,7 +57,8 @@ export default {
             UQ: false,
             UN: false,
             ZF: false,
-            B: false
+            B: false,
+            FK: null
           },
           {
             name: "deleted_at",
@@ -68,7 +70,8 @@ export default {
             UQ: false,
             UN: false,
             ZF: false,
-            B: false
+            B: false,
+            FK: null
           },
           {
             name: "updated_at",
@@ -80,7 +83,8 @@ export default {
             UQ: false,
             UN: false,
             ZF: false,
-            B: false
+            B: false,
+            FK: null
           },
           {
             name: "created_at",
@@ -92,7 +96,8 @@ export default {
             UQ: false,
             UN: false,
             ZF: false,
-            B: false
+            B: false,
+            FK: null
           }
         ],
         indexes: [],

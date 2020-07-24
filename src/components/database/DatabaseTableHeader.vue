@@ -28,8 +28,8 @@
       </th>
     </tr>
     <tr role="row">
-      <th role="columnheader" scope="col" title="Primary Key">
-        <div>PK</div>
+      <th role="columnheader" scope="col" title="Column Status">
+        <div>S</div>
       </th>
       <th role="columnheader" scope="col">
         <div>Name</div>

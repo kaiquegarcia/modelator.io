@@ -130,7 +130,8 @@ export default {
         UQ: false,
         UN: false,
         ZF: false,
-        B: false
+        B: false,
+        FK: null
       };
       this.table.columns.push(column);
       this.openColumnEditor(this.table.columns.length - 1);
