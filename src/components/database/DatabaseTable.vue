@@ -19,39 +19,21 @@
         @remove="remove"
         @add="createColumn"
       ></database-table-header>
-      <draggable v-model="table.columns" tag="tbody" role="rowgroup">
-        <tr
-          v-for="(column, columnIndex) in table.columns"
-          role="row"
-          :key="columnIndex"
-        >
-          <td role="cell" class="text-center">
-            <b-icon-lock v-if="column.PK"></b-icon-lock>
-          </td>
-          <td role="cell">{{ column.name }}</td>
-          <td role="cell">{{ column.dataType }}</td>
-          <td role="cell" class="text-center">
-            <b-icon-pencil
-              class="cursor-pointer"
-              @click="openColumnEditor(columnIndex)"
-            ></b-icon-pencil>
-            <b-icon-x
-              class="cursor-pointer"
-              @click="removeColumn(columnIndex)"
-            ></b-icon-x>
-          </td>
-        </tr>
-      </draggable>
+      <database-table-body
+        :columns="table.columns"
+        @edit="openColumnEditor"
+        @remove="removeColumn"
+      ></database-table-body>
     </table>
   </vue-draggable-resizable>
 </template>
 <script>
-import draggable from "vuedraggable";
 import DatabaseTableEditor from "./DatabaseTableEditor";
 import DatabaseTableColumnEditor from "./DatabaseTableColumnEditor";
-import Vue from "vue";
-import VueDraggableResizable from "vue-draggable-resizable";
 import DatabaseTableHeader from "./DatabaseTableHeader";
+import DatabaseTableBody from "./DatabaseTableBody";
+import VueDraggableResizable from "vue-draggable-resizable";
+import Vue from "vue";
 
 const TableEditorClass = Vue.extend(DatabaseTableEditor);
 const ColumnEditorClass = Vue.extend(DatabaseTableColumnEditor);
@@ -60,8 +42,8 @@ let tableEditor = null,
 export default {
   name: "DatabaseTable",
   components: {
+    DatabaseTableBody,
     DatabaseTableHeader,
-    draggable,
     VueDraggableResizable
   },
   props: {
