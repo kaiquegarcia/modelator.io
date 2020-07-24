@@ -1,5 +1,5 @@
 <template>
-  <b-modal ref="modal" title="Column editor" @hidden="close">
+  <b-modal ref="modal" title="Column editor" @hidden="destroy">
     <div class="d-block">
       <b-form-group label="Name">
         <b-input type="text" v-model="column.name" required ref="columnName" />
@@ -87,19 +87,25 @@
 export default {
   name: "DatabaseColumnEditor",
   props: {
-    columnInput: {
-      type: Object,
+    tableIndex: {
+      type: Number,
+      required: true
+    },
+    columnIndex: {
+      type: Number,
       required: true
     }
   },
-  data() {
-    return {
-      column: this.columnInput
-    };
-  },
   methods: {
-    close() {
-      this.$emit("close");
+    destroy() {
+      window.setTimeout(() => this.$destroy(), 600);
+    }
+  },
+  computed: {
+    column() {
+      return this.$store.state.diagram.tables[this.tableIndex].columns[
+        this.columnIndex
+      ];
     }
   },
   beforeDestroy() {
@@ -108,8 +114,10 @@ export default {
   mounted() {
     this.$refs.modal.show();
     window.setTimeout(() => {
-      this.$refs.columnName.focus();
-      this.$refs.columnName.select();
+      if (this.$refs.columnName) {
+        this.$refs.columnName.focus();
+        this.$refs.columnName.select();
+      }
     }, 500);
   }
 };

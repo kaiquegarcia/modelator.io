@@ -31,12 +31,13 @@
 </template>
 <script>
 import draggable from "vuedraggable";
+
 export default {
   name: "DatabaseTableBody",
   components: { draggable },
   props: {
-    columns: {
-      type: Array,
+    tableIndex: {
+      type: Number,
       required: true
     }
   },
@@ -46,6 +47,19 @@ export default {
     },
     remove(index) {
       this.$emit("remove", index);
+    }
+  },
+  computed: {
+    columns: {
+      get() {
+        return this.$store.state.diagram.tables[this.tableIndex].columns;
+      },
+      set(columns) {
+        this.$store.dispatch("diagram/assignTableColumnsOrder", {
+          tableIndex: this.tableIndex,
+          columns
+        });
+      }
     }
   }
 };

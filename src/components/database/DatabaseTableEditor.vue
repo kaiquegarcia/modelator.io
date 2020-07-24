@@ -1,5 +1,5 @@
 <template>
-  <b-modal ref="modal" title="Table editor" @hidden="close">
+  <b-modal ref="modal" title="Table editor" @hidden="destroy">
     <div class="d-block">
       <b-form-group label="Name">
         <b-input type="text" v-model="table.name" required ref="tableName" />
@@ -17,19 +17,14 @@
 export default {
   name: "DatabaseTableEditor",
   props: {
-    tableInput: {
-      type: Object,
+    tableIndex: {
+      type: Number,
       required: true
     }
   },
-  data() {
-    return {
-      table: this.tableInput
-    };
-  },
   methods: {
-    close() {
-      this.$emit("close");
+    destroy() {
+      window.setTimeout(() => this.$destroy(), 600);
     }
   },
   beforeDestroy() {
@@ -38,9 +33,16 @@ export default {
   mounted() {
     this.$refs.modal.show();
     window.setTimeout(() => {
-      this.$refs.tableName.focus();
-      this.$refs.tableName.select();
+      if (this.$refs.tableName) {
+        this.$refs.tableName.focus();
+        this.$refs.tableName.select();
+      }
     }, 500);
+  },
+  computed: {
+    table() {
+      return this.$store.state.diagram.tables[this.tableIndex];
+    }
   }
 };
 </script>

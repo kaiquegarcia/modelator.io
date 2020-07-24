@@ -7,118 +7,44 @@
 import DatabaseTable from "./DatabaseTable";
 import Vue from "vue";
 import "vue-draggable-resizable/dist/VueDraggableResizable.css";
+import { mapState } from "vuex";
 
 const DatabaseTableClass = Vue.extend(DatabaseTable);
 export default {
   name: "Diagram",
   data() {
     return {
-      tables: {},
-      instances: {},
-      lastId: 0,
-      scale: 1.0
+      workspace: null,
+      lastId: 0
     };
   },
   methods: {
-    getWorkspace() {
-      return document.querySelector(".diagram-workspace");
+    createTableContainer(id) {
+      let tableContainer = document.createElement("div");
+      tableContainer.id = id;
+      this.workspace.appendChild(tableContainer);
     },
     createTable() {
-      let tableContainer = document.createElement("div");
       this.lastId++;
       let id = "table_" + this.lastId;
-      tableContainer.id = id;
-      this.getWorkspace().appendChild(tableContainer);
-      this.tables[id] = {
-        name: "table_name",
-        description: "",
-        engine: "",
-        columns: [
-          {
-            name: "id",
-            dataType: "INT(11)",
-            defaultExpression: "",
-            PK: true,
-            AI: true,
-            NN: false,
-            UQ: false,
-            UN: false,
-            ZF: false,
-            B: false,
-            FK: null
-          },
-          {
-            name: "status",
-            dataType: "ENUM('draft', 'published')",
-            defaultExpression: "'draft'",
-            PK: false,
-            AI: false,
-            NN: true,
-            UQ: false,
-            UN: false,
-            ZF: false,
-            B: false,
-            FK: null
-          },
-          {
-            name: "deleted_at",
-            dataType: "DATETIME",
-            defaultExpression: "NULL",
-            PK: false,
-            AI: false,
-            NN: false,
-            UQ: false,
-            UN: false,
-            ZF: false,
-            B: false,
-            FK: null
-          },
-          {
-            name: "updated_at",
-            dataType: "DATETIME",
-            defaultExpression: "NULL",
-            PK: false,
-            AI: false,
-            NN: false,
-            UQ: false,
-            UN: false,
-            ZF: false,
-            B: false,
-            FK: null
-          },
-          {
-            name: "created_at",
-            dataType: "TIMESTAMP",
-            defaultExpression: "CURRENT_TIMESTAMP",
-            PK: false,
-            AI: false,
-            NN: false,
-            UQ: false,
-            UN: false,
-            ZF: false,
-            B: false,
-            FK: null
-          }
-        ],
-        indexes: [],
-        foreignKeys: []
-      };
-      let table = new DatabaseTableClass({
-        propsData: {
-          tableInput: this.tables[id],
-          scale: this.scale
-        }
+      this.$store.dispatch("diagram/addTable", id).then(() => {
+        this.createTableContainer(id);
+        const tableIndex = this.tables.length - 1;
+        let table = new DatabaseTableClass({
+          store: this.$store,
+          propsData: { tableIndex }
+        });
+        table.$mount("#" + id);
       });
-      table.$mount("#table_" + this.lastId);
-      table.$on("remove", () => this.removeTable(id));
-      table.openTableEditor();
-      this.instances[id] = table;
-    },
-    removeTable(id) {
-      this.instances[id].$destroy();
-      delete this.instances[id];
-      delete this.tables[id];
     }
+  },
+  computed: mapState({
+    name: state => state.diagram.name,
+    tables: state => state.diagram.tables,
+    scale: state => state.diagram.scale
+  }),
+  mounted() {
+    this.workspace = document.querySelector(".diagram-workspace");
   }
 };
 </script>

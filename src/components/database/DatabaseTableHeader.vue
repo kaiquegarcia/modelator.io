@@ -38,7 +38,7 @@
         <div>Data Type</div>
       </th>
       <th role="columnheader" scope="col">
-        <b-icon-plus class="cursor-pointer" @click="add"></b-icon-plus>
+        <b-icon-plus class="cursor-pointer" @click="addColumn"></b-icon-plus>
       </th>
     </tr>
   </thead>
@@ -47,8 +47,8 @@
 export default {
   name: "DatabaseTableHeader",
   props: {
-    table: {
-      type: Object,
+    tableIndex: {
+      type: Number,
       required: true
     }
   },
@@ -59,8 +59,13 @@ export default {
     remove() {
       this.$emit("remove");
     },
-    add() {
+    addColumn() {
       this.$emit("add");
+    }
+  },
+  computed: {
+    table() {
+      return this.$store.state.diagram.tables[this.tableIndex];
     }
   }
 };

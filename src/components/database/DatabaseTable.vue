@@ -14,13 +14,13 @@
       class="table b-table table-striped table-hover table-bordered table-sm table-light"
     >
       <database-table-header
-        :table="table"
+        :table-index="tableIndex"
         @edit="openTableEditor"
         @remove="remove"
         @add="createColumn"
       ></database-table-header>
       <database-table-body
-        :columns="table.columns"
+        :table-index="tableIndex"
         @edit="openColumnEditor"
         @remove="removeColumn"
       ></database-table-body>
@@ -39,8 +39,7 @@ import Vue from "vue";
 const TableEditorClass = Vue.extend(DatabaseTableEditor);
 const ColumnEditorClass = Vue.extend(DatabaseTableColumnEditor);
 const ConfirmationModalClass = Vue.extend(ConfirmationModal);
-let tableEditor = null,
-  columnEditor = null;
+
 export default {
   name: "DatabaseTable",
   components: {
@@ -49,30 +48,34 @@ export default {
     VueDraggableResizable
   },
   props: {
-    tableInput: {
-      type: Object,
-      required: true
-    },
-    scale: {
+    tableIndex: {
       type: Number,
       required: true
     }
   },
   data() {
     return {
-      table: this.tableInput,
-      currentEditingColumnIndex: -1
+      confirmationModalsContainer: null,
+      confirmationModalId: "confirmation-modal",
+      editorsContainer: null,
+      tableEditorId: "table-editor",
+      tableColumnEditorId: "table-column-editor"
     };
   },
   methods: {
-    getConfirmationModalsContainer() {
-      return document.querySelector(".confirmation-modals-container");
+    createConfirmationModal() {
+      let $el = document.createElement("div");
+      $el.id = this.confirmationModalId;
+      this.confirmationModalsContainer.appendChild($el);
+    },
+    createEditor(id) {
+      let editorContainer = document.createElement("div");
+      editorContainer.id = id;
+      this.editorsContainer.appendChild(editorContainer);
     },
     confirm(title, description) {
       return new Promise((resolve, reject) => {
-        let $el = document.createElement("div");
-        $el.id = "confirmation-modal";
-        this.getConfirmationModalsContainer().appendChild($el);
+        this.createConfirmationModal();
         let modal = new ConfirmationModalClass({
           propsData: {
             title: title,
@@ -81,73 +84,75 @@ export default {
         });
         modal.$on("ok", resolve);
         modal.$on("deny", reject);
-        modal.$mount("confirmation-modal");
+        modal.$mount("#" + this.confirmationModalId);
       });
-    },
-    getEditorContainer() {
-      return document.querySelector(".editor-container");
     },
     openTableEditor() {
-      let editorContainer = document.createElement("div");
-      editorContainer.id = "table-editor-container";
-      this.getEditorContainer().appendChild(editorContainer);
-      tableEditor = new TableEditorClass({
+      this.createEditor(this.tableEditorId);
+      let editor = new TableEditorClass({
+        store: this.$store,
         propsData: {
-          tableInput: this.table
+          tableIndex: this.tableIndex
         }
       });
-      tableEditor.$mount("#table-editor-container");
-      tableEditor.$on("close", () => this.closeTableEditor());
-    },
-    closeTableEditor() {
-      tableEditor.$destroy();
+      editor.$mount("#" + this.tableEditorId);
     },
     openColumnEditor(columnIndex) {
-      this.currentEditingColumnIndex = columnIndex;
-      let editorContainer = document.createElement("div");
-      editorContainer.id = "column-editor-container";
-      this.getEditorContainer().appendChild(editorContainer);
-      columnEditor = new ColumnEditorClass({
+      this.createEditor(this.tableColumnEditorId);
+      let editor = new ColumnEditorClass({
+        store: this.$store,
         propsData: {
-          columnInput: this.table.columns[this.currentEditingColumnIndex]
+          tableIndex: this.tableIndex,
+          columnIndex: columnIndex
         }
       });
-      columnEditor.$mount("#column-editor-container");
-      columnEditor.$on("close", () => this.closeColumnEditor());
-    },
-    closeColumnEditor() {
-      columnEditor.$destroy();
+      editor.$mount("#" + this.tableColumnEditorId);
     },
     createColumn() {
-      let firstColumn = !this.table.columns.length;
-      let column = {
-        name: firstColumn ? "id" : "row_" + this.table.columns.length,
-        dataType: firstColumn ? "INT" : "VARCHAR(45)",
-        defaultExpression: "",
-        PK: Boolean(firstColumn),
-        AI: Boolean(firstColumn),
-        NN: false,
-        UQ: false,
-        UN: false,
-        ZF: false,
-        B: false,
-        FK: null
-      };
-      this.table.columns.push(column);
-      this.openColumnEditor(this.table.columns.length - 1);
+      this.$store
+        .dispatch("diagram/addTableColumn", this.tableIndex)
+        .then(() => {
+          this.openColumnEditor(this.table.columns.length - 1);
+        });
     },
     removeColumn(columnIndex) {
       this.confirm(
         "Are you sure?",
         "<p>Do you really want to delete this column?</p><p>This action can't be undone.</p>"
-      ).then(() => this.table.columns.splice(columnIndex, 1));
+      ).then(() => {
+        this.$store.dispatch("diagram/deleteTableColumn", {
+          tableIndex: this.tableIndex,
+          columnIndex
+        });
+      });
     },
     remove() {
       this.confirm(
         "Are you sure?",
         "<p>Do you really want to delete this table?</p><p>This action can't be undone.</p>"
-      ).then(() => this.$emit("remove"));
+      ).then(() => {
+        this.$store
+          .dispatch("diagram/deleteTable", this.tableIndex)
+          .then(() => {
+            this.$destroy();
+          });
+      });
     }
+  },
+  computed: {
+    table() {
+      return this.$store.state.diagram.tables[this.tableIndex];
+    },
+    scale() {
+      return this.$store.state.diagram.scale;
+    }
+  },
+  mounted() {
+    this.confirmationModalsContainer = document.querySelector(
+      ".confirmation-modals-container"
+    );
+    this.editorsContainer = document.querySelector(".editor-container");
+    this.openTableEditor();
   },
   beforeDestroy() {
     this.$root.$el.parentNode.removeChild(this.$root.$el);

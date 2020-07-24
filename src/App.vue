@@ -35,16 +35,23 @@ import Diagram from "./components/database/Diagram";
 import Vue from "vue";
 
 const DiagramClass = Vue.extend(Diagram);
-const diagram = new DiagramClass();
+
 export default {
   name: "App",
+  data() {
+    return {
+      diagram: null
+    };
+  },
   methods: {
     createTable() {
-      diagram.createTable();
+      this.diagram.createTable();
     }
   },
   mounted() {
-    diagram.$mount("#diagram-container");
+    this.diagram = new DiagramClass({
+      store: this.$store
+    }).$mount("#diagram-container");
   }
 };
 </script>

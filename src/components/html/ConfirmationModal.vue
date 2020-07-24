@@ -24,9 +24,11 @@ export default {
   methods: {
     confirm() {
       this.$emit("ok");
+      this.$destroy();
     },
     deny() {
       this.$emit("deny");
+      this.$destroy();
     }
   },
   mounted() {
