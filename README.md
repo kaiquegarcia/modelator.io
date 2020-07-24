@@ -15,7 +15,7 @@ Atualmente, um protótipo do que será uma ferramenta excelente para modelagem d
 | 🔘 | Criar estrutura de diagramas |
 | 🔘 | Implementar drag & sort de colunas ([vuedraggable](https://sortablejs.github.io/Vue.Draggable/)) |
 | 🔘 | Implementar drag de tabelas no workspace ([vue-draggable-resizable](https://github.com/mauricius/vue-draggable-resizable)) |
-| ⚪ | Implementar stores ([vuex](https://vuex.vuejs.org/)) |
+| 🔘 | Implementar stores ([vuex](https://vuex.vuejs.org/)) |
 | ⚪ | Implementar traduções ([vue-i18n](https://kazupon.github.io/vue-i18n/)) |
 | ⚪ | Implementar documentação em código ([vuese](https://github.com/vuese/vuese)) |
 | ⚪ | Criar registro de chaves estrangeiras |
