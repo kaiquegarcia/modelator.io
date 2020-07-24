@@ -13,55 +13,12 @@
       role="table"
       class="table b-table table-striped table-hover table-bordered table-sm table-light"
     >
-      <thead role="rowgroup" class="thead-dark text-center">
-        <tr role="row">
-          <th
-            role="columnheader"
-            scope="col"
-            v-if="table.engine"
-            class="bg-danger align-middle"
-          >
-            <div>
-              {{ table.engine }}
-            </div>
-          </th>
-          <th role="columnheader" scope="col" :colspan="table.engine ? 2 : 3">
-            <div>
-              {{ table.name }}
-              <b-icon-pencil
-                class="cursor-pointer"
-                @click="openTableEditor"
-              ></b-icon-pencil>
-              <template v-if="table.description">
-                <br />
-                <small>{{ table.description }}</small>
-              </template>
-            </div>
-          </th>
-          <th role="columnheader" scope="col" class="align-middle">
-            <div>
-              <b-icon-x class="cursor-pointer" @click="remove"></b-icon-x>
-            </div>
-          </th>
-        </tr>
-        <tr role="row">
-          <th role="columnheader" scope="col" title="Primary Key">
-            <div>PK</div>
-          </th>
-          <th role="columnheader" scope="col">
-            <div>Name</div>
-          </th>
-          <th role="columnheader" scope="col">
-            <div>Data Type</div>
-          </th>
-          <th role="columnheader" scope="col">
-            <b-icon-plus
-              class="cursor-pointer"
-              @click="createColumn"
-            ></b-icon-plus>
-          </th>
-        </tr>
-      </thead>
+      <database-table-header
+        :table="table"
+        @edit="openTableEditor"
+        @remove="remove"
+        @add="createColumn"
+      ></database-table-header>
       <draggable v-model="table.columns" tag="tbody" role="rowgroup">
         <tr
           v-for="(column, columnIndex) in table.columns"
@@ -94,6 +51,7 @@ import DatabaseTableEditor from "./DatabaseTableEditor";
 import DatabaseTableColumnEditor from "./DatabaseTableColumnEditor";
 import Vue from "vue";
 import VueDraggableResizable from "vue-draggable-resizable";
+import DatabaseTableHeader from "./DatabaseTableHeader";
 
 const TableEditorClass = Vue.extend(DatabaseTableEditor);
 const ColumnEditorClass = Vue.extend(DatabaseTableColumnEditor);
@@ -102,6 +60,7 @@ let tableEditor = null,
 export default {
   name: "DatabaseTable",
   components: {
+    DatabaseTableHeader,
     draggable,
     VueDraggableResizable
   },
