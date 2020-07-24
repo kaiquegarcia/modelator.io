@@ -26,6 +26,7 @@
       >
     </b-navbar>
     <div class="editor-container"></div>
+    <div class="confirmation-modals-container"></div>
   </div>
 </template>
 

@@ -33,10 +33,12 @@ import DatabaseTableColumnEditor from "./DatabaseTableColumnEditor";
 import DatabaseTableHeader from "./DatabaseTableHeader";
 import DatabaseTableBody from "./DatabaseTableBody";
 import VueDraggableResizable from "vue-draggable-resizable";
+import ConfirmationModal from "../html/ConfirmationModal";
 import Vue from "vue";
 
 const TableEditorClass = Vue.extend(DatabaseTableEditor);
 const ColumnEditorClass = Vue.extend(DatabaseTableColumnEditor);
+const ConfirmationModalClass = Vue.extend(ConfirmationModal);
 let tableEditor = null,
   columnEditor = null;
 export default {
@@ -63,6 +65,25 @@ export default {
     };
   },
   methods: {
+    getConfirmationModalsContainer() {
+      return document.querySelector(".confirmation-modals-container");
+    },
+    confirm(title, description) {
+      return new Promise((resolve, reject) => {
+        let $el = document.createElement("div");
+        $el.id = "confirmation-modal";
+        this.getConfirmationModalsContainer().appendChild($el);
+        let modal = new ConfirmationModalClass({
+          propsData: {
+            title: title,
+            description: description
+          }
+        });
+        modal.$on("ok", resolve);
+        modal.$on("deny", reject);
+        modal.$mount("confirmation-modal");
+      });
+    },
     getEditorContainer() {
       return document.querySelector(".editor-container");
     },
@@ -115,22 +136,16 @@ export default {
       this.openColumnEditor(this.table.columns.length - 1);
     },
     removeColumn(columnIndex) {
-      if (
-        confirm(
-          "Você quer mesmo apagar essa coluna? Essa ação não poderá ser desfeita."
-        )
-      ) {
-        this.table.columns.splice(columnIndex, 1);
-      }
+      this.confirm(
+        "Are you sure?",
+        "<p>Do you really want to delete this column?</p><p>This action can't be undone.</p>"
+      ).then(() => this.table.columns.splice(columnIndex, 1));
     },
     remove() {
-      if (
-        confirm(
-          "Você quer mesmo apagar essa tabela? Essa ação não poderá ser desfeita."
-        )
-      ) {
-        this.$emit("remove");
-      }
+      this.confirm(
+        "Are you sure?",
+        "<p>Do you really want to delete this table?</p><p>This action can't be undone.</p>"
+      ).then(() => this.$emit("remove"));
     }
   },
   beforeDestroy() {
