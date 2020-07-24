@@ -30,7 +30,7 @@ Atualmente, um protótipo do que será uma ferramenta excelente para modelagem d
 
 ## Guia de instalação
 
-1. Baixe o projeto:
+### 1. Baixe o projeto:
 Via SSH
 ```
 git clone git@github.com:kaiquegarcia/modelator.io.git
@@ -40,12 +40,12 @@ Ou HTTPS
 git clone https://github.com/kaiquegarcia/modelator.io.git
 ```
 
-2. Instale as dependências:
+### 2. Instale as dependências:
 ```
 npm instal
 ```
 
-3. Execute o projeto:
+### 3. Execute o projeto:
 ```
 npm run serve
 ```
