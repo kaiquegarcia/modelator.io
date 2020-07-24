@@ -19,6 +19,7 @@ Atualmente, um protótipo do que será uma ferramenta excelente para modelagem d
 | ⚪ | Implementar traduções ([vue-i18n](https://kazupon.github.io/vue-i18n/)) |
 | ⚪ | Implementar documentação em código ([vuese](https://github.com/vuese/vuese)) |
 | ⚪ | Criar registro de chaves estrangeiras |
+| ⚪ | Implementar ligação entre origem e tabela com FK ([leader-line-vue](https://www.npmjs.com/package/leader-line-vue)) |
 | ⚪ | Criar registro de índices |
 | ⚪ | Criar registro de inserts iniciais |
 | ⚪ | Criar registro de configuração do Schema/Diagrama |
