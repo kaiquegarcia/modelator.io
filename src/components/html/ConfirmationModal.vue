@@ -2,10 +2,10 @@
   <b-modal ref="modal" :title="title" @ok="confirm" @hidden="deny">
     <div v-html="description"></div>
     <template v-slot:modal-footer="{ ok, cancel }">
-      <b-button variant="outline-secondary" @click="cancel">
+      <b-button variant="outline-secondary" @click.prevent="cancel">
         Nevermind...
       </b-button>
-      <b-button variant="danger" @click="ok">Do it!</b-button>
+      <b-button variant="danger" @click.prevent="ok">Do it!</b-button>
     </template>
   </b-modal>
 </template>
@@ -24,11 +24,14 @@ export default {
   methods: {
     confirm() {
       this.$emit("ok");
-      this.$destroy();
+      this.destroy();
     },
     deny() {
       this.$emit("deny");
-      this.$destroy();
+      this.destroy();
+    },
+    destroy() {
+      window.setTimeout(() => this.$destroy(), 600);
     }
   },
   mounted() {

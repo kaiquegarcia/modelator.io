@@ -119,24 +119,28 @@ export default {
       this.confirm(
         "Are you sure?",
         "<p>Do you really want to delete this column?</p><p>This action can't be undone.</p>"
-      ).then(() => {
-        this.$store.dispatch("diagram/deleteTableColumn", {
-          tableIndex: this.tableIndex,
-          columnIndex
-        });
-      });
+      )
+        .then(() => {
+          this.$store.dispatch("diagram/deleteTableColumn", {
+            tableIndex: this.tableIndex,
+            columnIndex
+          });
+        })
+        .catch(() => console.log("Column deletion cancelled"));
     },
     remove() {
       this.confirm(
         "Are you sure?",
         "<p>Do you really want to delete this table?</p><p>This action can't be undone.</p>"
-      ).then(() => {
-        this.$store
-          .dispatch("diagram/deleteTable", this.tableIndex)
-          .then(() => {
-            this.$destroy();
-          });
-      });
+      )
+        .then(() => {
+          this.$store
+            .dispatch("diagram/deleteTable", this.tableIndex)
+            .then(() => {
+              this.$destroy();
+            });
+        })
+        .catch(() => console.log("Table deletion cancelled"));
     }
   },
   computed: {

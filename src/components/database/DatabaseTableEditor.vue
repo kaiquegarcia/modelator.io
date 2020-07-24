@@ -2,13 +2,27 @@
   <b-modal ref="modal" title="Table editor" @hidden="destroy">
     <div class="d-block">
       <b-form-group label="Name">
-        <b-input type="text" v-model="table.name" required ref="tableName" />
+        <b-input
+          type="text"
+          v-model="table.name"
+          required
+          ref="tableName"
+          @keydown.native.enter="hide"
+        />
       </b-form-group>
       <b-form-group label="Description">
-        <b-input type="text" v-model="table.description" />
+        <b-input
+          type="text"
+          v-model="table.description"
+          @keydown.native.enter="hide"
+        />
       </b-form-group>
       <b-form-group label="Engine">
-        <b-input type="text" v-model="table.engine" />
+        <b-input
+          type="text"
+          v-model="table.engine"
+          @keydown.native.enter="hide"
+        />
       </b-form-group>
     </div>
   </b-modal>
@@ -23,6 +37,9 @@ export default {
     }
   },
   methods: {
+    hide() {
+      this.$refs.modal.hide();
+    },
     destroy() {
       window.setTimeout(() => this.$destroy(), 600);
     }

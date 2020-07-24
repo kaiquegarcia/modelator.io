@@ -1,14 +1,34 @@
 <template>
-  <b-modal ref="modal" title="Column editor" @hidden="destroy">
+  <b-modal
+    ref="modal"
+    title="Column editor"
+    @hidden="destroy"
+    @keydown.native.enter="hide"
+  >
     <div class="d-block">
       <b-form-group label="Name">
-        <b-input type="text" v-model="column.name" required ref="columnName" />
+        <b-input
+          type="text"
+          v-model="column.name"
+          required
+          ref="columnName"
+          @keydown.native.enter="hide"
+        />
       </b-form-group>
       <b-form-group label="Data type">
-        <b-input type="text" v-model="column.dataType" required />
+        <b-input
+          type="text"
+          v-model="column.dataType"
+          required
+          @keydown.native.enter="hide"
+        />
       </b-form-group>
       <b-form-group label="Default value/expression">
-        <b-input type="text" v-model="column.defaultExpression" />
+        <b-input
+          type="text"
+          v-model="column.defaultExpression"
+          @keydown.native.enter="hide"
+        />
       </b-form-group>
       <b-form-group>
         <b-form-checkbox
@@ -97,6 +117,9 @@ export default {
     }
   },
   methods: {
+    hide() {
+      this.$refs.modal.hide();
+    },
     destroy() {
       window.setTimeout(() => this.$destroy(), 600);
     }
