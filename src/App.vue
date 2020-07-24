@@ -10,14 +10,20 @@
             class="mr-sm-2"
             variant="success"
             @click="createTable"
-            >Adicionar tabela</b-button
           >
+            <b-icon-table></b-icon-table>
+          </b-button>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <div id="diagram-container"></div>
     <b-navbar type="light" fixed="bottom" variant="light">
-      <b-nav-text>Made with love by <b-link href="https://kaiquegarcia.dev" target="_blank">Kaique Garcia</b-link></b-nav-text>
+      <b-nav-text
+        >Made with love by
+        <b-link href="https://kaiquegarcia.dev" target="_blank"
+          >Kaique Garcia</b-link
+        ></b-nav-text
+      >
     </b-navbar>
     <div class="editor-container"></div>
   </div>
